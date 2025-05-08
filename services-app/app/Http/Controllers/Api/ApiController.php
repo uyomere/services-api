@@ -18,11 +18,44 @@ use App\Models\UserAddress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Info(
+ *     title="Your API Name",
+ *     version="1.0.0",
+ *     description="API documentation for your Laravel application"
+ * )
+ * @OA\Server(
+ *     url="http://localhost:8000/api/v1",
+ *     description="Local Development Server"
+ * )
+ * @OA\SecurityScheme(
+ *     securityScheme="bearerAuth",
+ *     type="http",
+ *     scheme="bearer",
+ *     bearerFormat="JWT"
+ * )
+ */
 class ApiController extends Controller
 {
     use FileUploadTrait;
-
+    /**
+     * @OA\Post(
+     *     path="/user/register",
+     *     summary="Register a new user",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"name","email","password"},
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", example="john@example.com"),
+     *             @OA\Property(property="password", type="string", example="password123")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="User registered successfully"),
+     *     @OA\Response(response=400, description="Validation error")
+     * )
+     */
     public function Userregister(Request $request)
     {
         $validate = Validator::make($request->all(), [
@@ -53,7 +86,22 @@ class ApiController extends Controller
             'data' => $response
         ], 200);
     }
-
+    /**
+     * @OA\Post(
+     *     path="/user/login",
+     *     summary="Login Successful",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *
+     *             @OA\Property(property="email", type="string", example="john@example.com"),
+     *             @OA\Property(property="password", type="string", example="password123")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="User registered successfully"),
+     *     @OA\Response(response=400, description="Validation error")
+     * )
+     */
     public function login(Request $request)
     {
         $validate = Validator::make($request->all(), [
@@ -183,7 +231,7 @@ class ApiController extends Controller
         ], 200);
     }
 
-    //getting all category 
+    //getting all category
     public function allCategory()
     {
         $categories = ProductCategory::get();
@@ -235,7 +283,7 @@ class ApiController extends Controller
         ], 200);
     }
 
-    //delete category 
+    //delete category
     public function deleteCategory($id)
     {
         $category = ProductCategory::find($id);
@@ -287,7 +335,7 @@ class ApiController extends Controller
 
     //end product functions
 
-    //shipping function start here 
+    //shipping function start here
 
     public function createShipping(Request $request)
     {
@@ -318,7 +366,7 @@ class ApiController extends Controller
 
     //shipping ends
 
-    //payment start here 
+    //payment start here
     public function createPayment(Request $request)
     {
 
@@ -345,9 +393,9 @@ class ApiController extends Controller
         ], 200);
     }
 
-    //end payment 
+    //end payment
 
-    //order methode start here 
+    //order methode start here
     public function createOrder(Request $request)
     {
 
@@ -442,7 +490,7 @@ class ApiController extends Controller
 
     //address ends
 
-    //review start here 
+    //review start here
     public function createReview(Request $request)
     {
 
